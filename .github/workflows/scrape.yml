@@ -1,0 +1,36 @@
+name: SHOGUN9000K Daily Ingest
+
+on:
+  schedule:
+    - cron: '0 */8 * * *'      # Every 8 hours
+  workflow_dispatch:
+
+jobs:
+  scrape-and-revalidate:
+    runs-on: ubuntu-latest
+    env:
+      SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run scraper
+        env:
+          VITE_SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          VITE_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          VITE_REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+        run: node -e "await fetch('https://shogun9000k.vercel.app/api/scrape?secret=' + process.env.VITE_REVALIDATE_SECRET, {method:'GET'}).then(r=>r.json()).then(console.log)"
+
+      - name: Revalidate (optional ISR flush)
+        run: curl -X POST "https://shogun9000k.vercel.app/api/revalidate?secret=$REVALIDATE_SECRET"
