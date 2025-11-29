@@ -1,6 +1,11 @@
 <script lang="ts">
-  import { page } from '$app/stores';
-  let jobsList = $page.data.jobs || [];
+  export let data;
+  const jobsList = data.jobs || [];
+
+  // ← THIS WAS THE 500 KILLER — DECLARE IT HERE
+  let error: string | null = null;
+  
+  // Rest of your script (vibeFilter, filtered, etc.) stays unchanged
   let vibeFilter = 'all';
 
   const vibeOrder = ['faang_tier', 'hidden_gem', 'startup_chaos', 'corporate_zombie', 'avoid'];
