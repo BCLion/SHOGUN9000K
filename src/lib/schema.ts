@@ -12,7 +12,7 @@ export const jobs = pgTable('jobs', {
   description: text('description'),
   city: text('city'),
   insights: jsonb('insights'),
-  scrapedAt: timestamp('scraped_at').defaultNow(),
+  scraped_at: timestamp('scraped_at').defaultNow(),
   enrichedAt: timestamp('enriched_at'),
 });
 
