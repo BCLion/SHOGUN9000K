@@ -6,8 +6,8 @@ export async function getDb() {
     throw new Error('DB is server-only');
   }
 
-  if (!process.env.DATABASE_URL) {
-    throw new Error('Missing DATABASE_URL — check Vercel env');
+  if (!process.env.PGSQL_DATABASE_URL) {
+    throw new Error('Missing PGSQL_DATABASE_URL — check Vercel env');
   }
 
   if (!dbPromise) {
@@ -16,7 +16,7 @@ export async function getDb() {
       const postgres = (await import('postgres')).default;
 
       // THIS IS THE KEY: use the NON-POOLED URL + prepare: false
-      const client = postgres(process.env.DATABASE_URL!, {
+      const client = postgres(process.env.PGSQL_DATABASE_URL!, {
         prepare: false,
         max: 1,
       });
