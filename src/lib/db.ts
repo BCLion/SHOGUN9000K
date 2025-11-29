@@ -1,11 +1,13 @@
-// src/lib/db.ts — SERVER-ONLY
+// src/lib/db.ts
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import * as schema from './schema';
+
+const connectionString = process.env.POSTGRES_URL!;
 
 if (typeof window !== 'undefined') {
-  throw new Error('DB is server-only');
+  // Client-side: throw error or return dummy
+  throw new Error('DB not available on client');
 }
 
-const client = postgres(process.env.POSTGRES_URL!);
-export const db = drizzle(client, { schema });
+const client = postgres(connectionString);
+export const db = drizzle(client);
