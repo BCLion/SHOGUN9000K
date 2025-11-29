@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@tailwindcss/postcss": "^4.1.17",
     "axios": "^1.13.2",
     "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.7",
