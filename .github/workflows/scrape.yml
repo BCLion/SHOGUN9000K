@@ -1,34 +1,37 @@
+# .github/workflows/scrape.yml
+# SHOGUN9000K — DAILY DOMINATION PIPELINE (2025 CANONICAL EDITION)
+
 name: SHOGUN9000K Daily Ingest
 
 on:
   schedule:
-    - cron: '0 */8 * * *'      # Every 8 hours
-  workflow_dispatch:
+    # Every 6 hours — maximum freshness without getting rate-limited
+    - cron: '0 */6 * * *'
+  workflow_dispatch:  # Manual trigger button in GitHub UI
 
 jobs:
-  scrape-and-revalidate:
+  trigger-scrape:
     runs-on: ubuntu-latest
-    env:
-      SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
-      REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+    name: Fire the Scraper
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install deps
-        run: npm ci
-
-      - name: Trigger Scrape
+      - name: Launch APC9000 Scraper
         env:
-          LIVE_URL: ${{ secrets.VERCEL_LIVE_URL }}
-          SECRET: ${{ secrets.REVALIDATE_SECRET }}
+          # Your actual live Vercel URL (the one that shows in the dashboard)
+          VERCEL_URL: ${{ secrets.VERCEL_LIVE_URL }}
+          # Must be EXACTLY the same value you have in Vercel → Environment Variables
+          REVALIDATE_SECRET: apc9000
         run: |
-          echo "Hitting $LIVE_URL/api/scrape?secret=$SECRET"
-          curl -f -X GET "$LIVE_URL/api/scrape?secret=$SECRET" || exit 1
+          echo "SHOGUN9000K WAKING UP..."
+          echo "Target → $VERCEL_URL/api/scrape?secret=$REVALIDATE_SECRET"
+          echo ""
+
+          RESPONSE=$(curl -s -f -X GET \
+            "$VERCEL_URL/api/scrape?secret=$REVALIDATE_SECRET" \
+            -H "User-Agent: SHOGUN9000K-GitHub-Action/1.0")
+
+          echo "RESPONSE FROM MATRIX:"
+          echo "$RESPONSE" | jq .
+
+          echo ""
+          echo "DOMINATION COMPLETE. THE UNDERGROUND HAS BEEN FED."
