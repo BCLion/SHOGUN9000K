@@ -3,7 +3,7 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
 
 // Vercel auto-injects DATABASE_URL — this is the golden key
-const sql = neon(process.env.DATABASE_URL!);
+const sql = neon(process.env.PGSQL_POSTGRES_DATABASE!);
 
 export const db = drizzle(sql);   // ← NEW SYNTAX (no { client: sql })
 
