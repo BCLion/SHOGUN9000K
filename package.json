@@ -5,13 +5,14 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build",
+		"sync": "svelte-kit sync",
+		"build": "npm run sync && vite build",
 		"preview": "vite preview",
 		"db:push": "drizzle-kit push",
 		"db:studio": "drizzle-kit studio",
 		"prepare": "svelte-kit sync || echo ''",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"check": "npm run sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "npm run sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test:e2e": "playwright test",
 		"test": "npm run test:e2e",
 		"postinstall": "npm run db:push"
