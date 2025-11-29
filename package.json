@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@neondatabase/serverless": "^1.0.2",
     "@tailwindcss/postcss": "^4.1.17",
     "axios": "^1.13.2",
     "dotenv": "^17.2.3",
