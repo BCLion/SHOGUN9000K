@@ -3,11 +3,12 @@ import adapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 export default {
+	preprocess: vitePreprocess(),
   kit: {
     adapter: adapter({
       runtime: 'nodejs18.x'  // Ensures Node.js env for server routes
     }),
-    preprocess: vitePreprocess(),
+    
     // CRITICAL FIX — Exclude server-only modules from client bundling
     vite: {
       ssr: {
