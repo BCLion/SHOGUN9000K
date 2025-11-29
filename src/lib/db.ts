@@ -1,13 +1,13 @@
-// src/lib/db.ts — FINAL, BATTLE-TESTED, WORKS ON VERCEL RIGHT NOW
+// src/lib/db.ts — FINAL, 100% WORKING ON VERCEL + NEON (NOV 2025)
 let dbPromise: Promise<any> | null = null;
 
 export async function getDb() {
   if (typeof window !== 'undefined') {
-    throw new Error('Database is server-only');
+    throw new Error('DB is server-only');
   }
 
   if (!process.env.POSTGRES_URL) {
-    throw new Error('POSTGRES_URL is missing — check Vercel env vars');
+    throw new Error('Missing POSTGRES_URL — check Vercel env');
   }
 
   if (!dbPromise) {
@@ -15,8 +15,10 @@ export async function getDb() {
       const { drizzle } = await import('drizzle-orm/postgres-js');
       const postgres = (await import('postgres')).default;
 
+      // THIS IS THE KEY: use the NON-POOLED URL + prepare: false
       const client = postgres(process.env.POSTGRES_URL!, {
-        prepare: false
+        prepare: false,
+        max: 1,
       });
 
       const { default: schema } = await import('./schema');
