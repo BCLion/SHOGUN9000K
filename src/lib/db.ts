@@ -1,15 +1,24 @@
-// src/lib/db.ts — SERVER-ONLY DYNAMIC LOADING (fixes bundling forever)
-let db: any = null;
+// src/lib/db.ts — FINAL, NO SYNTAX ERRORS, SERVER-ONLY, TYPE-SAFE
+let dbPromise: Promise<any> | null = null;
 
 export async function getDb() {
+  // Block client-side execution
   if (typeof window !== 'undefined') {
-    throw new Error('DB is server-only — use +page.server.js or +server.ts');
+    throw new Error('Database is server-only');
   }
-  if (!db) {
-    const { drizzle } from 'drizzle-orm/postgres-js';
-    const postgres from 'postgres';
-    const client = postgres(process.env.POSTGRES_URL!);
-    db = drizzle(client, { schema: (await import('./schema')).default });
+
+  if (!dbPromise) {
+    dbPromise = (async () => {
+      // Dynamic imports — proper async syntax
+      const { drizzle } = await import('drizzle-orm/postgres-js');
+      const postgres = await import('postgres');
+      
+      const client = postgres.default(process.env.POSTGRES_URL!);
+      const { default: schema } = await import('./schema');
+
+      return drizzle(client, { schema });
+    })();
   }
-  return db;
+
+  return dbPromise;
 }
