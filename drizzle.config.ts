@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();  // Load .env for local dev
 
 export default defineConfig({
-  dialect: 'postgresql',  // Canonical for Vercel Postgres
+  dialect: 'postgresql',  // Canonical for Vercel Postgres test
   schema: './src/lib/schema.ts',
   out: './drizzle',
   dbCredentials: {
