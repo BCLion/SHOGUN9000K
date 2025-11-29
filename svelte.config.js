@@ -4,13 +4,6 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 export default {
   preprocess: vitePreprocess(),
   kit: {
-    adapter: adapter({
-      runtime: 'nodejs20'
-    }),
-    vite: {
-      ssr: {
-        external: ['postgres', 'drizzle-orm', '@vercel/postgres', 'pg']
-      }
-    }
+    adapter: adapter()
   }
 };
