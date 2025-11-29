@@ -90,4 +90,42 @@
           {@const color = vibeColors[vibe] || 'from-gray-600 to-gray-800'}
 
           <div class="group relative bg-gradient-to-br {color} p-6 rounded-2xl border-2 border-orange-900/50 shadow-2xl hover:shadow-orange-600/50 transition-all duration-300 hover:scale-105">
-            <div class="absolute inset-0
+            <div class="absolute inset-0 bg-black opacity-30 rounded-2xl"></div>
+            <div class="relative z-10">
+              <h3 class="text-2xl font-bold text-white mb-2">{job.title || 'Unknown Role'}</h3>
+              <p class="text-orange-200 text-lg mb-1">{job.company || 'Stealth Mode'}</p>
+              <p class="text-sm text-orange-300 mb-4">{job.location || 'Remote / Classified'}</p>
+
+              {#if job.insights}
+                <div class="text-xs space-y-1 mb-4">
+                  <p><strong>Vibe:</strong> <span class="text-white">{(job.insights.vibe || 'avoid').replace('_', ' ').toUpperCase()}</span></p>
+                  {#if job.insights.red_flags}<p class="text-red-300">Red Flags: {job.insights.red_flags}</p>{/if}
+                  {#if job.insights.green_flags}<p class="text-green-300">Green Flags: {job.insights.green_flags}</p>{/if}
+                </div>
+
+                <blockquote class="italic text-sm text-orange-100 border-l-4 border-orange-500 pl-4">
+                  "{job.insights.summary || 'No intel available'}"
+                </blockquote>
+              {/if}
+
+              <div class="mt-6 flex justify-between items-center">
+                <a href={job.url} target="_blank" rel="noopener"
+                   class="px-4 py-2 bg-white text-black rounded font-bold hover:bg-orange-400 transition">
+                  APPLY
+                </a>
+                {#if job.salary_raw}
+                  <span class="text-sm bg-black/50 px-3 py-1 rounded">{job.salary_raw}</span>
+                {/if}
+              </div>
+            </div>
+          </div>
+        {/each}
+      </div>
+    {/if}
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center py-8 border-t border-orange-900 text-sm text-orange-700">
+    SHOGUN9000K • {new Date().getFullYear()} • The Spice Must Flow
+  </footer>
+</div>
