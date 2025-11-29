@@ -1,16 +1,16 @@
-// src/lib/db.ts
-import { drizzle } from 'drizzle-orm/neon-http';
-import { neon } from '@neondatabase/serverless';
+// src/lib/db.ts — STABLE POSTGRES.JS + DRIZZLE (NO NEON DRAMA, WORKS NOV 2025)
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 
-// Vercel auto-injects DATABASE_URL — this is the golden key
-const sql = neon(process.env.PGSQL_POSTGRES_URL!); 
+// Use Vercel's auto-injected DATABASE_URL (pooled is fine for postgres.js)
+const client = postgres(process.env.PGSQL_POSTGRES_URL!);
 
-export const db = drizzle(sql);   // ← NEW SYNTAX (no { client: sql })
-
-
+export const db = drizzle(client);
 
 
 
+
+// WORKING!! const sql = neon(process.env.PGSQL_POSTGRES_URL!);  //
 // ORIG CODE BEFORE SWITCHING TO NEON 2025-11-29 //
 // // src/lib/db.ts — FINAL, 100% WORKING ON VERCEL + NEON (NOV 2025)
 // let dbPromise: Promise<any> | null = null;
