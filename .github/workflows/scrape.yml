@@ -25,12 +25,10 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Run scraper
+      - name: Trigger Scrape
         env:
-          VITE_SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
-          VITE_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          VITE_REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
-        run: node -e "await fetch('https://shogun9000k.vercel.app/api/scrape?secret=' + process.env.VITE_REVALIDATE_SECRET, {method:'GET'}).then(r=>r.json()).then(console.log)"
-
-      - name: Revalidate (optional ISR flush)
-        run: curl -X POST "https://shogun9000k.vercel.app/api/revalidate?secret=$REVALIDATE_SECRET"
+          LIVE_URL: ${{ secrets.VERCEL_LIVE_URL }}
+          SECRET: ${{ secrets.REVALIDATE_SECRET }}
+        run: |
+          echo "Hitting $LIVE_URL/api/scrape?secret=$SECRET"
+          curl -f -X GET "$LIVE_URL/api/scrape?secret=$SECRET" || exit 1
