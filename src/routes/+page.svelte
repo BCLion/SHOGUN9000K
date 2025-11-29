@@ -1,25 +1,18 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { db } from '$lib/db';
-  import { jobs } from '$lib/schema';
+  import { page } from '$app/stores';
+  let jobsList = $page.data.jobs || [];
+  let vibeFilter = 'all';
 
-  let jobsList: any[] = [];
-  let error = '';
+  const vibeOrder = ['faang_tier', 'hidden_gem', 'startup_chaos', 'corporate_zombie', 'avoid'];
+  const vibeColors = {
+    faang_tier: 'from-yellow-600 to-orange-600',
+    hidden_gem: 'from-cyan-500 to-blue-600',
+    startup_chaos: 'from-purple-600 to-pink-600',
+    corporate_zombie: 'from-gray-700 to-gray-900',
+    avoid: 'from-red-800 to-red-950 border-red-600 animate-pulse'
+  };
 
-  onMount(async () => {
-    try {
-      // First — raw count to prove connection
-      const countResult = await db.execute(sql`SELECT COUNT(*) FROM jobs`);
-      console.log('DB COUNT:', countResult);
-
-      // Then real query
-      jobsList = await db.select().from(jobs).orderBy(jobs.scrapedAt, 'desc').limit(200);
-      console.log('JOBS LOADED:', jobsList.length);
-    } catch (e: any) {
-      error = e.message;
-      console.error('DB ERROR:', e);
-    }
-  });
+  $: filtered = vibeFilter === 'all' ? jobsList : jobsList.filter(j => j.insights?.vibe === vibeFilter);
 </script>
 
 {#if error}

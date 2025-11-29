@@ -4,10 +4,11 @@
 import { json } from '@sveltejs/kit';
 import axios from 'axios';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { db } from '$lib/db';
 import { jobs } from '$lib/schema';
 import { eq } from 'drizzle-orm';
 import type { RequestEvent } from '@sveltejs/kit';
+import { getDb } from '$lib/db';
+const db = await getDb();
 
 const CITIES = [
   "Toronto, Ontario", "Vancouver, British Columbia", "Ottawa, Ontario",
