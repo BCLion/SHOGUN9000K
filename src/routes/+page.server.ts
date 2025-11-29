@@ -1,6 +1,4 @@
-// Post 500 error fix:
-
-// src/routes/+page.server.ts — DEBUG MODE (logs to console — see in Vercel Functions tab)
+// src/routes/+page.server.ts — SNAKE_CASE QUERY
 import type { PageServerLoad } from '@sveltejs/kit';
 import { db } from '$lib/db';
 import { jobs } from '$lib/schema';
@@ -8,25 +6,61 @@ import { desc } from 'drizzle-orm';
 
 export const load: PageServerLoad = async () => {
   try {
-    console.log('🔥 SPICEFLOW QUERY STARTING...');
-    
+    console.log('🔥 SPICEFLOW QUERY FIRING...');
+
     const allJobs = await db
       .select()
       .from(jobs)
-      .orderBy(desc(jobs.scraped_at))  // Try scraped_at if camelCase fails
+      .orderBy(desc(jobs.scraped_at))  // ← SNAKE_CASE MATCH
       .limit(500);
 
-    console.log(`🔥 QUERY COMPLETE: Found ${allJobs.length} jobs`);
+    console.log(`🔥 SPICE HARVESTED: ${allJobs.length} jobs`);
+
     if (allJobs.length > 0) {
-      console.log('First job sample:', allJobs[0].title, allJobs[0].company);
+      console.log('Sample job:', allJobs[0]);
     }
 
     return { jobs: allJobs };
   } catch (e: any) {
-    console.error('🔥 QUERY ERROR:', e.message);
+    console.error('🔥 HARVEST ERROR:', e.message);
     return { jobs: [] };
   }
 };
+
+
+
+
+
+
+// Post 500 error fix:
+
+// src/routes/+page.server.ts — DEBUG MODE (logs to console — see in Vercel Functions tab)
+// import type { PageServerLoad } from '@sveltejs/kit';
+// import { db } from '$lib/db';
+// import { jobs } from '$lib/schema';
+// import { desc } from 'drizzle-orm';
+
+// export const load: PageServerLoad = async () => {
+//   try {
+//     console.log('🔥 SPICEFLOW QUERY STARTING...');
+    
+//     const allJobs = await db
+//       .select()
+//       .from(jobs)
+//       .orderBy(desc(jobs.scraped_at))  // Try scraped_at if camelCase fails
+//       .limit(500);
+
+//     console.log(`🔥 QUERY COMPLETE: Found ${allJobs.length} jobs`);
+//     if (allJobs.length > 0) {
+//       console.log('First job sample:', allJobs[0].title, allJobs[0].company);
+//     }
+
+//     return { jobs: allJobs };
+//   } catch (e: any) {
+//     console.error('🔥 QUERY ERROR:', e.message);
+//     return { jobs: [] };
+//   }
+// };
 
 // End Post 500 error fix
 
