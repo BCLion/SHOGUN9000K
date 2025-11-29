@@ -3,10 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  
-  "overrides": {
-    "@sveltejs/vite-plugin-svelte": "^4.0.0-next.6"
-  },
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
@@ -28,5 +24,4 @@
     "drizzle-orm": "^0.33.0",
     "postgres": "^3.4.7"
   }
-  
 }
