@@ -1,0 +1,27 @@
+name: SPICEFLOW — The Spice Must Flow
+
+on:
+  schedule:
+    # - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  flow-the-spice:
+    runs-on: ubuntu-latest
+    env:
+      SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Python deps
+        run: pip install requests google-generativeai psycopg2-binary
+      - name: Flow the Spice
+        run: python pipeline/ingest.py
+      - name: SPICEFLOW COMPLETE
+        run: echo "✅ The Spice extends life. The Spice expands consciousness. The Spice is vital to deployment."
