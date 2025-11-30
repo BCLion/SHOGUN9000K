@@ -53,7 +53,7 @@
   </header>
 
   <!-- VIBE FILTERS — PERFECT SPACING -->
-  <div class="flex flex-wrap justify-center gap-8 py-10 px-6"> <!-- gap was -4 -->
+  <div class="flex flex-wrap justify-center gap-8 py-10 px-6"> <!-- gap was -4 now -8 -->
     <button
       on:click={() => vibeFilter = 'all'}
       class="px-10 py-4 rounded-full font-bold text-lg shadow-2xl transition-all
