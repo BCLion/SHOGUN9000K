@@ -5,7 +5,7 @@
   let error: string | null = null;
   let vibeFilter: string = 'all';
 
-  // UPDATED VIBE SYSTEM — ADD BIPOLAR CULTURE
+  // UPDATED VIBE SYSTEM — ADD FRESH BIPOLAR CULTURE
   const vibeOrder = ['faang_tier', 'hidden_gem', 'startup_chaos', 'corporate_zombie', 'avoid', 'bipolar_culture'] as const;
   
   const vibeColors: Record<string, string> = {
