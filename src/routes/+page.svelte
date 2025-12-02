@@ -107,25 +107,30 @@
               {/if}
 
               <!-- FLAGS — RESTORED INTELLIGENCE REPORT -->
-              <div class="flex flex-wrap gap-2 mb-6">
-                {#each (job.insights?.red_flags || []).filter(Boolean) as flag}
-                  <span class="px-3 py-1 bg-red-950/90 text-red-300 text-xs border border-red-700 rounded-full animate-pulse">WARNING: {flag}</span>
-                {/each}
-                {#each (job.insights?.green_flags || []).filter(Boolean) as flag}
-                  <span class="px-3 py-1 bg-green-950/80 text-green-300 text-xs border border-green-700 rounded-full">POSITIVE: {flag}</span>
-                {/each}
-              </div>
+<!-- FLAGS — BULLETPROOF VERSION (fixes Warren, MI bleed + proper line breaks) -->
+<div class="space-y-3 mb-6">
+  <!-- Red flags -->
+  {#if job.insights?.red_flags && job.insights.red_flags.length}
+    <div class="flex flex-wrap gap-2">
+      {#each job.insights.red_flags.filter(f => f && typeof f === 'string' && !f.includes('Warren')) as flag}
+        <span class="px-3 py-1 bg-red-950/90 text-red-300 text-xs border border-red-700 rounded-full animate-pulse">
+          WARNING: {flag.trim()}
+        </span>
+      {/each}
+    </div>
+  {/if}
 
-              {#if job.salary_raw && job.salary_raw !== 'Not listed'}
-                <div class="text-yellow-300 font-bold text-lg mb-6">{job.salary_raw}</div>
-              {:else}
-                <div class="text-red-400 font-bold mb-6 relative group/salary">
-                  SALARY HIDDEN
-                  <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-red-900 text-white text-xs px-3 py-1 rounded opacity-0 group-hover/salary:opacity-100 transition whitespace-nowrap z-50">
-                    Red flag: Hidden salary = negotiation hell
-                  </span>
-                </div>
-              {/if}
+  <!-- Green flags -->
+  {#if job.insights?.green_flags && job.insights.green_flags.length}
+    <div class="flex flex-wrap gap-2">
+      {#each job.insights.green_flags.filter(f => f && typeof f === 'string') as flag}
+        <span class="px-3 py-1 bg-green-950/80 text-green-300 text-xs border border-green-700 rounded-full">
+          POSITIVE: {flag.trim()}
+        </span>
+      {/each}
+    </div>
+  {/if}
+</div>
 
               <!-- PERFECTLY ALIGNED APPLY BUTTON -->
               <a 
