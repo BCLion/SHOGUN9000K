@@ -128,7 +128,7 @@ def enrich(job):
   "skills": ["Python", "TypeScript", "AWS", ...],
   "red_flags": ["on-call hell", "legacy Java", null],
   "green_flags": ["remote-first", "modern stack", null],
-  "vibe": "FAANG-tier" | "Hidden Gem" | "Startup Chaos" | "Corporate Zombie" | "Avoid",
+  "vibe": "FAANG-tier" | "Hidden Gem" | "Startup Chaos" | "Corporate Zombie" | "Avoid" | "Toxic",
   "seniority": "Junior" | "Mid" | "Senior" | "Staff" | "Principal",
   "match_score": 0-100
 }}
@@ -138,6 +138,11 @@ Company: {job["company"]}
 Location: {job["location"]}
 Salary: {job["salary_raw"]}
 Description: {job["description"][:1400]}
+
+Rules:
+- Use "Toxic" when red flags heavily outweigh green flags and the culture sounds actively harmful.
+- Never put city names, states, or salary info in red_flags/green_flags.
+- Never hallucinate skills not explicitly mentioned.
 '''
 
     for attempt in range(3):

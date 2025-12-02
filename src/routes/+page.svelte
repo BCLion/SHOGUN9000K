@@ -6,7 +6,7 @@
   let vibeFilter: string = 'all';
 
   // UPDATED VIBE SYSTEM — ADD FRESH BIPOLAR CULTURE
-  const vibeOrder = ['faang_tier', 'hidden_gem', 'startup_chaos', 'corporate_zombie', 'avoid', 'bipolar_culture'] as const;
+  const vibeOrder = ['faang_tier', 'hidden_gem', 'startup_chaos', 'corporate_zombie', 'avoid', 'toxic_culture'] as const;
   
   const vibeColors: Record<string, string> = {
     faang_tier: 'from-yellow-600 to-orange-600',
@@ -14,7 +14,7 @@
     startup_chaos: 'from-purple-600 to-pink-700',
     corporate_zombie: 'from-gray-700 to-gray-900',
     avoid: 'from-red-800 to-red-950 border-red-600 animate-pulse',
-    bipolar_culture: 'from-blue-600 to-red-600 border-purple-600 animate-pulse-slow'  // mixed duality
+    toxic_culture: 'from-blue-600 to-red-600 border-purple-600 animate-pulse-slow'  // mixed duality
   };
 
   $: filtered = vibeFilter === 'all' 
