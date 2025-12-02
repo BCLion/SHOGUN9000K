@@ -1,25 +1,29 @@
-<!-- src/routes/+page.svelte — SHOGUN9000K v1.0 CRYO-FREEZE (FINAL FOREVER) -->
+<!-- src/routes/+page.svelte — FINAL CRYO-FREEZE EDITION (VIBE UPDATE + INTEL RESTORED) -->
 <script lang="ts">
   export let data;
   const jobsList = data.jobs || [];
-
+  let error: string | null = null;
   let vibeFilter: string = 'all';
-  let currentPage = 1;
-  const pageSize = 30;
 
-  const vibeOrder = ['faang_tier', 'hidden_gem', 'startup_chaos', 'corporate_zombie', 'avoid'] as const;
+  // UPDATED VIBE SYSTEM — ADD BIPOLAR CULTURE
+  const vibeOrder = ['faang_tier', 'hidden_gem', 'startup_chaos', 'corporate_zombie', 'avoid', 'bipolar_culture'] as const;
   
   const vibeColors: Record<string, string> = {
     faang_tier: 'from-yellow-600 to-orange-600',
     hidden_gem: 'from-cyan-500 to-blue-600',
     startup_chaos: 'from-purple-600 to-pink-700',
     corporate_zombie: 'from-gray-700 to-gray-900',
-    avoid: 'from-red-800 to-red-950 border-red-600 animate-pulse'
+    avoid: 'from-red-800 to-red-950 border-red-600 animate-pulse',
+    bipolar_culture: 'from-blue-600 to-red-600 border-purple-600 animate-pulse-slow'  // mixed duality
   };
 
   $: filtered = vibeFilter === 'all' 
     ? jobsList 
     : jobsList.filter(j => j.insights?.vibe === vibeFilter);
+
+  // PAGINATION — FREMEN CODEX STYLE
+  let currentPage = 1;
+  const pageSize = 30;
 
   $: totalPages = Math.ceil(filtered.length / pageSize);
   $: startItem = (currentPage - 1) * pageSize + 1;
@@ -27,36 +31,32 @@
   $: paginatedJobs = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   $: if (vibeFilter) currentPage = 1;
-
-  $: console.log(`SHOGUN9000K — Page ${currentPage}/${totalPages} • ${filtered.length} filtered • ${jobsList.length} total`);
 </script>
 
 <svelte:head>
   <title>SHOGUN9000K — Career Black Ops Division</title>
-  <meta name="description" content="A secret report within the Guild. The Spice Must Flow." />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </svelte:head>
 
 <div class="min-h-screen bg-black text-orange-100 font-['Share_Tech_Mono']">
-
   <!-- GUILDMASTER HEADER -->
   <header class="text-center py-16 border-b-2 border-orange-900 relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-b from-orange-950/20 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-orange-950/30 to-transparent"></div>
     <h1 class="text-4xl md:text-7xl font-orbitron bg-gradient-to-r from-orange-400 via-red-500 to-yellow-500 bg-clip-text text-transparent mb-4 tracking-widest">
       A SECRET REPORT WITHIN THE GUILD
     </h1>
     <p class="text-2xl md:text-4xl text-orange-300 mb-2">Career Black Ops Division</p>
     <p class="text-lg md:text-2xl text-orange-500 mb-6">Battlefield Intelligence Reports • The Spice Must Flow</p>
-    <div class="text-orange-600 animate-pulse text-sm pulse text-sm md:text-base">
+    <div class="text-orange-600 animate-pulse text-sm md:text-base">
       {jobsList.length} classified reports harvested • {new Date().toLocaleDateString()}
     </div>
   </header>
 
-  <!-- VIBE FILTERS — PERFECT SPACING -->
-  <div class="flex flex-wrap justify-center gap-8 py-10 px-6"> <!-- gap was -4 now -8 -->
+  <!-- VIBE FILTERS — FLUID & FLAWLESS -->
+  <div class="flex flex-wrap justify-center gap-6 py-10 px-6"> 
     <button
       on:click={() => vibeFilter = 'all'}
-      class="px-10 py-4 rounded-full font-bold text-lg shadow-2xl transition-all
+      class="px-10 py-4 rounded-full font-bold text-lg min-w-fit transition-all shadow-2xl
              {vibeFilter === 'all' ? 'bg-orange-600 text-black ring-4 ring-orange-400 scale-110' : 'bg-gray-800 hover:bg-gray-700 text-orange-200'}">
       ALL VIBES
     </button>
@@ -64,22 +64,22 @@
       {@const label = vibe.replace('_', ' ').toUpperCase()}
       <button
         on:click={() => vibeFilter = vibe}
-        class="px-10 py-4 rounded-full font-bold text-lg bg-gradient-to-r {vibeColors[vibe]} text-white shadow-2xl transition-all hover:scale-110 {vibeFilter === vibe ? 'ring-4 ring-white/60 scale-115' : ''}">
+        class="px-10 py-4 rounded-full font-bold text-lg min-w-fit bg-gradient-to-r {vibeColors[vibe]} text-white shadow-2xl transition-all hover:scale-110 {vibeFilter === vibe ? 'ring-4 ring-white/50 scale-115' : ''}">
         {label}
       </button>
     {/each}
   </div>
 
-  <!-- GRID + PAGINATION -->
+  <!-- MAIN GRID + PAGINATION -->
   <div class="max-w-7xl mx-auto px-4 pb-20">
     {#if filtered.length === 0}
       <div class="text-center py-32">
-        <h2 class="text-6xl font-orbitron text-orange-500 mb-8">
+        <h2 class="text-5xl font-orbitron text-orange-500 mb-8">
           {jobsList.length === 0 ? 'STANDBY MODE' : 'NO REPORTS MATCH FILTER'}
         </h2>
         <p class="text-2xl text-gray-400">
           {jobsList.length === 0 
-            ? 'Awaiting wormsign... pipeline harvesting.' 
+            ? 'Pipeline harvesting... await the wormsign.' 
             : 'No truths match this vibe, Fremen.'}
         </p>
       </div>
@@ -106,6 +106,7 @@
                 </blockquote>
               {/if}
 
+              <!-- FLAGS — RESTORED INTELLIGENCE REPORT -->
               <div class="flex flex-wrap gap-2 mb-6">
                 {#each (job.insights?.red_flags || []).filter(Boolean) as flag}
                   <span class="px-3 py-1 bg-red-950/90 text-red-300 text-xs border border-red-700 rounded-full animate-pulse">WARNING: {flag}</span>
@@ -177,11 +178,12 @@
   </div>
 
   <!-- FOOTER -->
-  <footer class="text-center py-10 border-t border-orange-900 text-orange-600">
+  <footer class="text-center py-10 border-t border-orange-900 text-orange-600 text-sm">
     SHOGUN9000K • {new Date().getFullYear()} • The Spice Must Flow • Cryo-Frozen v1.0
   </footer>
 </div>
 
 <style>
   .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .animate-pulse-slow { animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
 </style>
