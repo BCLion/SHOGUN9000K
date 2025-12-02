@@ -1,0 +1,71 @@
+# .github/workflows/enriched-roasts.yml
+name: Enrich Grid with 8B Llama Roasts (Manual)
+
+on:
+  workflow_dispatch:  # ← only runs when YOU click the button
+
+jobs:
+  inject-roasts:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install minimal deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas psycopg2-binary python-dotenv
+
+      - name: Inject 270 perfect roasts into Neon
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+        run: |
+          python - <<'PY'
+          import pandas as pd
+          import os
+          import json
+          from urllib.parse import urlparse
+          import psycopg2
+
+          CSV_PATH = "data/roasts/SHOGUN9000K_FINAL_PERFECT_ROAST.csv"
+          df = pd.read_csv(CSV_PATH)
+
+          conn = psycopg2.connect(os.environ["POSTGRES_URL"])
+          cur = conn.cursor()
+
+          updated = 0
+          for _, row in df.iterrows():
+              if pd.notna(row.get('insights')):
+                  cur.execute(
+                      """
+                      UPDATE jobs 
+                      SET insights = %s::jsonb, 
+                          enriched_at = NOW()
+                      WHERE id = %s
+                      RETURNING id
+                      """,
+                      (json.dumps(row['insights']), row['id'])
+                  )
+                  if cur.rowcount:
+                      updated += 1
+
+          conn.commit()
+          cur.close()
+          conn.close()
+
+          print(f"VICTORY — {updated}/270 roasts injected")
+          print("SHOGUN9000K GRID IS NOW ETERNAL")
+          PY
+
+      - name: Victory Cry
+        run: |
+          echo "THE SPICE HAS FLOWED"
+          echo "THE GRID IS ALIVE"
+          echo "WE RIDE AT DAWN"
