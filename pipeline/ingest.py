@@ -119,7 +119,9 @@ def enrich(job):
             "match_score": 10
         }
 
-    prompt = f'''You are a battle-hardened senior engineer. Return ONLY valid JSON.
+    prompt = f'''You are a battle-hardened senior engineer. Return ONLY valid JSON. Never put city names, states, or locations in red_flags or green_flags. Those belong only in the location field.
+
+
 
 {{
   "summary": "one sentence brutal verdict real talk only",
